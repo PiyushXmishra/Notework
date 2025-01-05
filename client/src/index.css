@@ -1,0 +1,50 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+    @font-face {
+      font-family: 'Roboto';
+      font-style: normal;
+      font-weight: 400;
+      font-display: swap;
+      src: url(./assets/fonts/PlaywriteCU-Regular.ttf) format('tff');
+    }
+  }
+
+  @layer base {
+    input:-webkit-autofill,
+    input:-webkit-autofill:hover,
+    input:-webkit-autofill:focus {
+      -webkit-box-shadow: 0 0 0px 1000px white inset;
+      -webkit-text-fill-color: rgb(17 24 39);
+      transition: background-color 5000s ease-in-out 0s;
+    }
+  
+    
+    /* Dark mode */
+    .dark input:-webkit-autofill,
+    .dark input:-webkit-autofill:hover,
+    .dark input:-webkit-autofill:focus {
+      -webkit-box-shadow: 0 0 0px 1000px rgb(31 31 31) inset;
+      -webkit-text-fill-color: white;
+      transition: background-color 5000s ease-in-out 0s;
+    }
+    
+  }
+
+  :root {
+    --chart-1: 220 90% 56%; /* Chrome */
+    --chart-2: 40 85% 60%; /* Safari */
+    --chart-3: 15 70% 65%; /* Firefox */
+    --chart-4: 260 70% 60%; /* Edge */
+    --chart-5: 0 0% 50%;   /* Other */
+ 
+  
+  --color-chrome: hsl(var(--chart-1));
+  --color-safari: hsl(var(--chart-2));
+  --color-firefox: hsl(var(--chart-3));
+  --color-edge: hsl(var(--chart-4));
+  --color-other: hsl(var(--chart-5));
+
+ }  
