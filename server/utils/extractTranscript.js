@@ -1,10 +1,9 @@
 const AppError= require("../Error/AppError")
 const  {YoutubeTranscript} = require( 'youtube-transcript');
 let transcript = ""
-async function extract_transcript(youtube_video_url){
-
-    const video_id = youtube_video_url.split("=")[1]
-    const value = await  YoutubeTranscript.fetchTranscript(video_id)
+async function extract_transcript(videoId){
+ 
+    const value = await  YoutubeTranscript.fetchTranscript(videoId)
      if(!value) throw new AppError('Transcription of the video not found', 404);
       transcript = " "
    for (let i = 0; i < value.length; i++) {

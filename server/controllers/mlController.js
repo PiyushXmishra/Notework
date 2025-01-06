@@ -13,15 +13,26 @@ const { error } = require('console')
 const { gemini } = require('../utils/geminiAn')
 
 const filePath = path.join(__dirname, './../disk/A.pdf'); 
-
+const regex = /\.be\/([^?]+)/;
 exports.Summary= async(req,res,next)=>{
     
         try{
+                let id=''
                 const {input}=  req.body
-                console.log(input)
-                const id = input.split('=')[1]
+                const videoId = input.match(regex)
+                if(!videoId) {
+                id= input.split('=')[1]
+
+                }else{
+                 id= input.split('/').pop().split('?')[0]
+                }
+
+                console.log(id)
+
+             
+               
                 const img = `https://img.youtube.com/vi/${id}/maxresdefault.jpg`
-        const transcript = await  extract_transcript(input)
+        const transcript = await  extract_transcript(id)
      
         
         const response= await  geminiflash(transcript,prompt)
@@ -55,6 +66,7 @@ exports.Summary= async(req,res,next)=>{
           })
         }catch(err){
           next(err)
+          
         }
    
 }
