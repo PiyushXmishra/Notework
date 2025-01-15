@@ -30,7 +30,11 @@ const handleSubmit = async(e: React.FormEvent<HTMLFormElement>)=>{
 
     const value = await response.json()
     console.log(value)
-    if(value.status === 'ok') setSignupStatus(true)
+    if(!response.ok ) return new Error
+   
+
+     setSignupStatus(true)
+  
     
   }catch(err){
       console.log(err)

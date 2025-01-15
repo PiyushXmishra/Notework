@@ -2,49 +2,81 @@
 import { useState } from "react";
 import { AuthProvider } from "../../context/auth";
 import { useAuthContext } from "../../hooks/useAuth";
+import { ChevronLeft, ChevronRight } from "lucide-react";
 
 function Previous() {
 
    const {activity} = useAuthContext()
    const [currentIndex, setCurrentIndex] = useState(0);
-   const itemsPerPage = 4; // Number of items per page
-  
+   const itemsPerPage = 4; 
+  if(!activity?.thumbnail) return new Error
+  const totalPages= Math.ceil(activity?.thumbnail.length/ itemsPerPage)
+  const startIndex = currentIndex * itemsPerPage;
+  // const displayedItems = activi.slice(startIndex, startIndex + itemsPerPage);
+
   return (
     <AuthProvider>
     <div className="flex flex-col justify-center gap-10 py-12">
       <h1 className=" flex justify-center text-2xl font-bold dark:text-white">Previous Visited</h1>
       <div className="md:flex md:flex-row md:justify-center md:items-center md:gap-8 md:ml-10 md:mr-10 flex flex-col items-center md:w-11/12 w-4/5 mx-auto gap-20">  
-      <div className="">
-        <button
-          onClick={()=>{ setCurrentIndex(currentIndex - 1)}}
-          disabled={currentIndex === 0}
-          className="absolute left-0  px-4 py-2 bg-blue-500 text-white rounded disabled:bg-blue-300 transform -translate-y-1/2"
-        >
-          {"<"}
-        </button>
-        <button
-          onClick={()=>{setCurrentIndex(currentIndex + 1)}}
-          disabled={currentIndex + itemsPerPage >= (activity?.thumbnail.length|| 0)}
-          className="absolute right-0  px-4 py-2 bg-blue-500 text-white rounded disabled:bg-blue-300 transform -translate-y-1/2"
-        >
-           {">"}
-        </button>
-      </div>
  
-   {activity?.thumbnail.slice(currentIndex, currentIndex + 4).map((value,key)=>(
-    <div className="border-2 border-gray-300 rounded  h-10/12" key={key}>
-    <img src={value} alt="hi" />
-    <p key={key} className="dark:text-white p-2 flex justify-center">{activity?.heading[key]}</p>
+ 
+   {activity?.thumbnail.slice(startIndex, startIndex + itemsPerPage).map((value,key)=>(
+    <div className="border-2 border-gray-300 rounded  h-[300px] w-[250px] flex flex-col" key={ startIndex+ key}>
+    <img src={value} className="w-full h-48 object-cover" alt="image" />
+    <div className="p-2 flex-1 flex items-center justify-center">
+          
+    <p  className="dark:text-white text-center line-clamp-2 overflow-hidden w-full">{activity?.heading[startIndex+ key]}</p>
+</div>
 </div> 
          
    ))}
       
-      
+ 
       </div>
+      {/* <div className="">
+        <button
+          onClick={()=>{ setCurrentIndex((prev)=>Math.max(0,prev-1))}}
+          disabled={currentIndex === 0}
+          className="absolute left-0  px-4 py-2 bg-blue-500 text-white rounded disabled:bg-blue-300 transform -translate-y-1/2"
+        >
+                     <ChevronLeft className="w-6 h-6" />
 
-      {/* <button className="dark:text-white font-bold" onClick={fetchActivity}> See more...</button> */}
-      
-   
+        </button>
+        <span className="text-sm">
+            Page {currentIndex + 1} of {totalPages}
+          </span>
+        <button
+          onClick={()=>{setCurrentIndex((prev)=> Math.min(totalPages-1,prev+1))}}
+          disabled={currentIndex=== totalPages-1}
+          className="absolute right-0  px-4 py-2 bg-blue-500 text-white rounded disabled:bg-blue-300 transform -translate-y-1/2"
+        >
+           {">"}
+        </button>
+      </div>  */}
+      <div className="flex justify-center items-center mt-6 gap-4">
+          <button
+            onClick={()=>{ setCurrentIndex((prev)=>Math.max(0,prev-1))}}
+            disabled={currentIndex === 0}
+            className="p-2 rounded-full hover:bg-gray-100 disabled:opacity-50 disabled:cursor-not-allowed"
+            aria-label="Previous page"
+          >
+            <ChevronLeft className="w-6 h-6" />
+          </button>
+          
+          <span className="text-sm">
+            Page {currentIndex + 1} of {totalPages}
+          </span>
+          
+          <button
+              onClick={()=>{setCurrentIndex((prev)=> Math.min(totalPages-1,prev+1))}}
+              disabled={currentIndex=== totalPages-1}
+            className="p-2 rounded-full hover:bg-gray-100 disabled:opacity-50 disabled:cursor-not-allowed"
+            aria-label="Next page"
+          >
+            <ChevronRight className="w-6 h-6" />
+          </button>
+        </div>
     </div>
     </AuthProvider>
   );

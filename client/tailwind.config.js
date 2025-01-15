@@ -23,6 +23,21 @@ export default {
         colorGradient4:'#2a2a2a',
         hoverColor:'#2f2f2f'
       },
+      // animation: {
+      //   pulse: 'pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+      // },
+      keyframes: {
+        shimmer: {
+          '0%': { backgroundPosition: '-2000px 0' },
+          '100%': { backgroundPosition: '2000px 0' },
+        },
+      },
+      animation: {
+        shimmer: 'shimmer 8s ease-in-out infinite ',
+      },
+      backgroundImage: {
+        'shimmer-gradient': 'linear-gradient(90deg, transparent 0%, rgba(255,255,255,0.4) 50%, transparent 100%)',
+      },
   
       
     },

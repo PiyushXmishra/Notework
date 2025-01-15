@@ -23,10 +23,7 @@ interface UserActivity {
 
 }
 
-export const Logout=()=>{
-  sessionStorage.clear()
-  return <h1> You are logged Out..</h1>
-}
+
 interface AuthContextType {
   isAuthenticated: boolean;
   setIsAuthenticated: Dispatch<SetStateAction<boolean>>;
@@ -36,7 +33,7 @@ interface AuthContextType {
   activity: UserActivity | null;
   fetchActivity: () => Promise<void>;
   checkAuth:() => Promise<void>;
-  Logout:()=> React.ReactNode
+  logout:()=> void;
 }
 
 
@@ -60,102 +57,77 @@ const [activity, setActivity] = useState<UserActivity | null>(() => {
     return cachedActivity ? JSON.parse(cachedActivity) : { thumbnail: [], heading: [], url:[] ,genre:[]};
   });
   const navigate = useNavigate()
-
-  
+  const logout = useCallback(() => {
+    setIsAuthenticated(false);
+    setUser(null);
+    setActivity(null);
+    sessionStorage.clear();
+    navigate('/login');
+  }, [navigate]);
   const checkAuth = useCallback(async () => {
     try {
       const response = await fetch('http://localhost:4000/auth/verify', {
         credentials: 'include',
       });
       const resp = await response.json();
-      console.log(resp)
-
-      if (response.status === 401) {
-        if(!isAuthenticated) return
-        handleLogout()
-         return
-      } 
-      console.log("checkauth running")
+      if(!response.ok) return new Error
         setIsAuthenticated(true);
         setUser(resp.data);
-        sessionStorage.setItem('user', JSON.stringify(resp.data)); // Cache user data
+        sessionStorage.setItem('user', JSON.stringify(resp.data));
+    // Cache user data
        } catch (error) {
       console.error('Auth check error:', error);
-      if(!isAuthenticated) return
 
-      handleLogout()
     }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  },[]);
+  },[logout]);
 
-  const fetchActivity = async()=>{
-    //  if(!user?.id){
-    //   checkAuth()
-    //    if(!user?.id) return
-    //  }
+  const fetchActivity = useCallback( async()=>{
+    if (!user?.id) {
+      console.warn('No user ID found, skipping fetchActivity');
+      return;
+    }
     try{
     const response = await fetch(`http://localhost:4000/ai/${user?.id}`, {
-          method: 'GET',
-          credentials: 'include', // Include cookies (with JWT)
+          credentials: 'include', 
         });
   
-        if (response.status===401) {
-          handleLogout()
+        if (!response.ok) {
           console.log("handleLogout run hua")
            return
         }
        
-        console.log("run nhi hua")
         const data = await response.json();
         setActivity(data.data);
-
-        sessionStorage.setItem('activity', JSON.stringify(data.data)); // Cache the data
+        sessionStorage.setItem('activity', JSON.stringify(data.data)); 
         
     }catch(error){
       console.error('Error is:',error)
-     handleLogout()
+   
     }
-  }
+  },[user?.id,logout])
 
-  const handleLogout = () => {
-    setIsAuthenticated(false);
-    setUser(null);
-    sessionStorage.clear();
-    setTimeout(() => navigate("/login"), 1000);
-    window.location.reload();
-  }  ;
+  useEffect(() => {
+    const cachedUser = sessionStorage.getItem('user');
+    const cachedActivity = sessionStorage.getItem('activity');
 
-  useEffect(()=>{
-    const cachedUser = sessionStorage.getItem('user')
-    const cachedActivity = sessionStorage.getItem('activity')
-    const newActivity= localStorage.getItem('newactivity')
-    if(cachedUser){
-     setUser(JSON.parse(cachedUser))
-     setIsAuthenticated(true)
-     if(cachedActivity){
-      const activity=JSON.parse(cachedActivity)
-
-      if(activity?.heading[0] && ((newActivity==='false' )||(!newActivity)) && activity?.url){
-        setActivity(JSON.parse(cachedActivity))
-        console.log(newActivity)
-        return
-        
-      }
+    if (cachedUser) {
+      setUser(JSON.parse(cachedUser));
+      setIsAuthenticated(true);
     }
-       fetchActivity()
-     if(!isAuthenticated) return
-    }
-    checkAuth()
 
-    // else if (!isAuthenticated){
-    //  checkAuth()
-    // }
-     
-   // eslint-disable-next-line react-hooks/exhaustive-deps
-   },[])
+    if (cachedActivity) {
+      setActivity(JSON.parse(cachedActivity));
+    } else {
+      fetchActivity(); // Fetch activity only if it's not cached
+    }
+
+    checkAuth(); // Always verify auth status on load
+  }, [checkAuth, fetchActivity]);
+
+
 
   return (
-    <AuthContext.Provider value={{ isAuthenticated,setIsAuthenticated, user ,Logout,checkAuth,activity,summaryInfo,setSummaryInfo, fetchActivity}}>
+    <AuthContext.Provider value={{ isAuthenticated,setIsAuthenticated, user ,logout,checkAuth,activity,summaryInfo,setSummaryInfo, fetchActivity}}>
       {children}
     </AuthContext.Provider>
   );

@@ -8,7 +8,7 @@ async function geminiflash(transcribe,prompt){
      const IntialPrompt=`Give this a suitable title omitting all **, **, inverted commas or any other notation just simple heading in 2-5 words . The text is given below: \n ${transcribe}`
      const GenrePrompt=`You will be provided with summary of user searched data, analyze the summary and give the topic or genre name which is searched by the user.The summaries are as follows: ${transcribe}`
 
-     console.log(finalPrompt)
+    console.log(finalPrompt)
     const title = await model.generateContent(IntialPrompt)
     const result =  await model.generateContent(finalPrompt)
     let topic = await model.generateContent(GenrePrompt)
