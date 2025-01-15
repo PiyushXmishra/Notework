@@ -25,7 +25,6 @@ export const ThemeProvider: React.FC<{ children: ReactNode }> = ({ children }) =
       return newTheme
     })
   }
- console.log("yeh h",darkMode)
   useEffect(() => {
     if(darkMode){
       document.documentElement.classList.add('dark')

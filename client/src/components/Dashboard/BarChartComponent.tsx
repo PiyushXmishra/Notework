@@ -1,62 +1,5 @@
 
-// import {
-//   BarChart,
-//   Bar,
-//   XAxis,
-//   YAxis,
-//   CartesianGrid,
-//   Tooltip,
-//   ResponsiveContainer,
-// } from 'recharts';
-// import { ThemeProvider} from "../../context/Theme"
-// import { useAuthContext } from '../../hooks/useAuth';
 
-
-// interface DataPoint {
-//   name: string | undefined;
-//   value: number;
-// }
-
-
-
-
-
-// // ChildComponent.tsx
-// interface ChildProps {
-//   value: string;
-// }
-// const BarChartComponent: React.FC<ChildProps> = ({value}) => {
-
-//   const {activity}=useAuthContext()
-
-//   const data: DataPoint[] = [
-//     { name: activity?.genre[0]|| 'Chatbot', value: 400 },
-//     { name: activity?.genre[1] || 'Machine Learning', value: 350 },
-//     { name: activity?.genre[2] || 'NLP', value: 300 },
-//     { name: activity?.genre[3] || 'Movies', value: 250 },
-//     // { name: 'Natural Language Processing', value: 200 },
-//   ];
-
-  
-//   return (
-//     <ThemeProvider>
-//     <div className="w-full h-80 bg-white dark:bg-colorGradient1 p-4 rounded-md shadow-md py-14">
-//       <h2 className="text-lg font-semibold mb-4 dark:text-white ">User Request Topics</h2>
-//       <ResponsiveContainer width="100%" height="100%" >
-//         <BarChart data={data} margin={{ top: 20, right: 10, left: 10, bottom: 5 }}>
-//           <CartesianGrid strokeDasharray="3 3"  />
-//           <XAxis dataKey="name"  stroke={value} />
-//           <YAxis  stroke={value} />
-//           <Tooltip  />
-//           <Bar dataKey="value" fill="#bb86fc"  barSize={500}/>
-//         </BarChart>
-//       </ResponsiveContainer>
-//     </div>
-//     </ThemeProvider>
-//   );
-// };
-
-// export default BarChartComponent;
 
 "use client"
 
@@ -118,10 +61,9 @@ export default function BarChartComponent() {
   }, [])
 
   return (
-    <Card className="flex-col border-none justify-center items-center mb-8">
+    <Card className="flex-col border-none justify-center items-center mb-8 ">
       <CardHeader className="items-center pb-0">
         <CardTitle className="dark:text-white text-3xl">Your Interests & Asked Topics</CardTitle>
-        {/* <CardDescription className=" text-xl dark:text-gray-300" >January - June 2024</CardDescription> */}
       </CardHeader>
       <CardContent className="flex-1 pb-0">
         <ChartContainer

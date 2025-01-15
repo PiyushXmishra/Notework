@@ -7,12 +7,17 @@ export default function Section() {
     <section className="dark:bg-colorGradient2 py-16">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center">
-          <h2 className=" flex justify-center gap-2 text-3xl font-bold text-gray-900 dark:text-white">Why Choose <h2 className="text-gray-500 dark:text-gray-400">Notework</h2></h2>
+          <div className="flex flex-row justify-center gap-2">
+
+
+          <h2 className="  text-3xl font-bold text-gray-900 dark:text-white">Why Choose </h2>
+            <h2 className="text-3xl text-gray-500 dark:text-gray-400">Notework</h2>
+          </div>
           <p className="mt-4 text-xl text-gray-600 dark:text-gray-400">Simple, powerful, and intelligent PDF processing</p>
         </div>
         
         <div className="mt-16 grid gap-8 md:grid-cols-3">
-          <div className="dark:bg-colorGradient1 p-8 rounded-xl shadow hover:shadow-md transition-shadow">
+          <div className="dark:bg-colorGradient1 p-8 rounded-xl shadow hover:shadow-lg transition-shadow">
             <div className="flex items-center justify-center w-12 h-12 bg-blue-100 rounded-lg mb-4">
               <Sparkles className="h-6 w-6 text-gray-600" />
             </div>
@@ -37,7 +42,7 @@ export default function Section() {
             </ul>
           </div>
 
-          <div className="dark:bg-colorGradient1 p-8 rounded-xl shadow-sm hover:shadow-md transition-shadow">
+          <div className="dark:bg-colorGradient1 p-8 rounded-xl shadow hover:shadow-lg transition-shadow">
             <div className="flex items-center justify-center w-12 h-12 bg-blue-100 rounded-lg mb-4">
               <Zap className="h-6 w-6 text-gray-600 dark" />
             </div>
@@ -64,7 +69,7 @@ export default function Section() {
             </div>
           </div>
 
-          <div className="dark:bg-colorGradient1 p-8 rounded-xl shadow-sm hover:shadow-md transition-shadow">
+          <div className="dark:bg-colorGradient1 p-8 rounded-xl shadow hover:shadow-lg transition-shadow">
             <div className="flex items-center justify-center w-12 h-12 bg-blue-100 rounded-lg mb-4">
               <Clock className="h-6 w-6 text-gray-600 dark" />
             </div>

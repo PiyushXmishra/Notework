@@ -3,22 +3,24 @@ import Createpdf from "../components/Transcribe/Createpdf";
 import Previous from "../components/Transcribe/Previous";
 import { useAuthContext } from "../hooks/useAuth";
 import { AuthProvider } from "../context/auth";
-import { ProgressSpinner } from 'primereact/progressspinner'
+// import { ProgressSpinner } from 'primereact/progressspinner'
 import { TextGenerateEffect } from "../components/Transcribe/text-generate-effect"; 
-
+import { SkeletonWave, TypingAnimation,LoadingSkeleton} from "../components/Transcribe/SkeletonEffect";
+// import { useNavigate } from "react-router-dom";
 
 export default function Transcribe() {
-  const { activity } = useAuthContext();
+  const { activity,logout } = useAuthContext();
   const [id, setId] = useState("");
   const [input, setInput] = useState("");
   const [output, setOutput] = useState<string>('');
   const [isDisable, setIsDisable] = useState(false);
-  
-  const handleSubmit = async (e: React.MouseEvent<HTMLButtonElement>) => {
-    setIsDisable(true);
+  // const navigate=useNavigate()
+  const handleSubmit = async (e: React.FormEvent) => {
+    
     
     try {
       e.preventDefault();
+      setIsDisable(true)
       const regex = /\.be\/([^?]+)/;
      console.log(input)
        let label=''
@@ -42,23 +44,23 @@ export default function Transcribe() {
       });
       const data = await response.json();
       console.log(data);
+      if(response.status===401){
+
+  logout()
+  throw new Error('Unauthorized');
+} 
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);
       }
-
+        
         setOutput(data.data.summary);
-       
-        // const Text = data.data.summary?.replace(/\*\*(.*?)\*\*/g, "<strong>$1</strong>");
-        // setOutput(Text)
-      
-  
-        setIsDisable(false);
         sessionStorage.setItem("id", data.data.id);
         localStorage.setItem("newactivity", `${!isDisable}`);
+        setIsDisable(false);
       
     } catch{
-     
-     setOutput("Oops, Something went wrong, try with another video")
+      setIsDisable(false);
+      setOutput("Oops, Something went wrong, try with another video")
     }
   };
 
@@ -72,6 +74,7 @@ export default function Transcribe() {
           <h1 className="text-3xl font-bold dark:text-white ">
             Youtube Videos Summarizer{" "}
           </h1>
+          
           <h2 className="text-gray-600 dark:text-gray-400 text-xl font-semibold">
             Too long to undertsand the vast video , summarize it here{" "}
           </h2>
@@ -79,8 +82,10 @@ export default function Transcribe() {
         <div className="border-2 border-gray-300 box-border rounded-lg mx-auto w-2/3 py-12">
           <h2 className=" flex justify-center text-xl font-bold dark:text-white">
             Youtube URL
+            
           </h2>
-          <form action="" className=" p-3 flex justify-center gap-4 ">
+          <form action="" className=" p-3 flex justify-center gap-4 " onSubmit={handleSubmit}
+              >
             <input
               type='url'
               value={input}
@@ -88,7 +93,7 @@ export default function Transcribe() {
               className="font-bold text-xl dark:text-white rounded-xl  w-10/12 ml-10 h-12 border-2 text-black dark:bg-colorGradient1 border-gray-300 focus:outline-none pl-3"
               pattern="https?://(www\.)?(youtube\.com|youtu\.be)/.*" 
               required
-
+disabled={isDisable}
             />
             <button
               className={`dark:bg-colorGradient1 ${
@@ -96,27 +101,45 @@ export default function Transcribe() {
                   ? "dark:bg-gray-400 bg-gray-300"
                   : "dark:bg-colorGradient1 bg-colorGradient1  "
               }   hover:bg-colorGradient3 text-white  rounded-lg  w-2/12 h-11 font-bold`}
-              onClick={handleSubmit}
               disabled={isDisable}
+
             >
               {" "}
               Submit{" "}
             </button>
           </form>
+          
         </div>
      <div className="flex flex-col justify-center gap-8 md:gap-16">
-  {(isDisable || output) && <img
+  {(isDisable) ?
+  <>
+    
+   <div className="">
+    <LoadingSkeleton />
+   <TypingAnimation/>
+   <SkeletonWave/>
+      </div > 
+      </>
+   
+   : 
+  output &&
+  <img
                   src={`https://img.youtube.com/vi/${id}/maxresdefault.jpg`}
                   alt="hi"
                   className="rounded-lg  w-4/6 h-92 mx-auto "
-                /> }{ (output.length===0 && isDisable) && <div className="flex justify-center items-center  ">
-     <ProgressSpinner style={{width: '50px', height: '50px'}} strokeWidth="6"   animationDuration=".9s" className=""  /> 
-     {/* <h1 className="">Spinner</h1> */}
-      <p className="dark:text-white text-2xl font-bold mt-2 pl-2 ">Summarizing text .....</p>
-     
-      </div > 
-     }
+                /> 
+              }
+
           <div>
+          { 
+          // ( isDisable) && 
+   
+  //  <div className="">
+  //   <TypingAnimation/>
+  //   <SkeletonWave/>
+  //      </div > 
+ 
+     }
             {output && (
               <div className=" flex-row mx-auto justify-center  text-gray-600  rounded-lg">
                 

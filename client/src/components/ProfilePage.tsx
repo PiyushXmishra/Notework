@@ -53,7 +53,6 @@ const handleLogout = async () => {
       
       navigate('/')
       window.location.reload();
-      // Perform any additional cleanup, such as updating state
     } else {
       console.error('Failed to log out');
     }

@@ -3,11 +3,11 @@ const path = require("path")
 require("dotenv").require
 const createUrl= async()=>{
     try{
-    // Configuration
+  
     v2.config({ 
         cloud_name: 'dmuigsle3', 
         api_key: process.env.CLOUDINARY_API_KEY,
-        api_secret:  process.env.CLOUDINARY_API_SECRET // Click 'View API Keys' above to copy your API secret
+        api_secret:  process.env.CLOUDINARY_API_SECRET 
     });
     const pdfPath = path.join(__dirname, './../disk', 'A.pdf');
     // Upload an image

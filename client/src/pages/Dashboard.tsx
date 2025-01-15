@@ -30,6 +30,7 @@ const Dashboard: React.FC = () => {
   return (
     <ThemeProvider>
     <div className="flex flex-col gap-16 pl-6  dark:bg-colorGradient2">
+  
       <div ref={analysisRef} id="analysis">
 <Resources /></div>
 {/* <div  className="flex flex-row gap-28" > */}
