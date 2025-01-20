@@ -48,7 +48,7 @@ exports.Summary= async(req,res,next)=>{
                   prompt:input,
                   summary : response.text,
                    genre:response.topic,
-                  summaryUrl:"youtube_link",
+                  
                   thumbnail:img
                 })
             
@@ -71,19 +71,17 @@ exports.Summary= async(req,res,next)=>{
    
 }
 
-exports.Pdf = async(req,res,next)=>{
+exports.CreatePdf = async(req,res,next)=>{
   try{
   const link = await createUrl()
   const {id }= req.params
   console.log(`${userId}`)
-  const notePdf = await notePrompt.findByIdAndUpdate(id,{summaryUrl:link.url})
-  console.log(notePdf)
-  await notePdf.save()
+   await notePrompt.findByIdAndUpdate(id,{summaryUrl:link.url},{ new: true })
+   
    res.status(200).json({
     status:"success",
     data: link.url
-   
-   })
+  })
 }catch({name,message}){
    res.status(404).json({
   status: "fail",
@@ -98,6 +96,7 @@ exports.Pdf = async(req,res,next)=>{
 exports.thumbnail = async(req,res,next)=>{
  try{ 
   const userId = req.params.id
+  
   const db = await notePrompt.find({userId})
 console.log(db)
   if(!db) return new Error('Could not find any data')
@@ -145,6 +144,41 @@ exports.removeDoc = async(req,res,next)=>{
     message:message
   })
  }
+}
+
+
+exports.Pdf= async(req,res,next)=>{
+  const {heading}= req.body
+  console.log(heading)
+  try{
+  const notePdf= await notePrompt.findOne({heading})
+console.log(notePdf)
+  if(!notePdf) return new Error("An error occured while deleting",error)
+  
+  if(!notePdf.summaryUrl){
+    const pdf = new FPDF('P','mm','A4');
+                pdf.AddPage();
+                pdf.SetFont('Arial','B',12);
+                pdf.MultiCell(0,10,notePdf.summary);
+                pdf.Output('F',filePath);
+    const link = await createUrl()
+    notePdf.summaryUrl = link.url
+
+  } 
+       await notePdf.save()
+
+  res.status(200).json({
+    status:"Success",
+    data:{
+      url:notePdf.summaryUrl
+    }
+   }) 
+  }catch({name,message}){
+    res.status(404).json({
+      status:name,
+      message:message
+    })
+   }
 }
 
 

@@ -15,11 +15,11 @@ interface Transcribe {
 }
 interface UserActivity {
   
-
   thumbnail: string[];
   heading: string[];
   url: string[],
   genre:string[]
+  
 
 }
 
@@ -34,6 +34,10 @@ interface AuthContextType {
   fetchActivity: () => Promise<void>;
   checkAuth:() => Promise<void>;
   logout:()=> void;
+  isUserExist:boolean;
+  setIsUserExist:Dispatch<SetStateAction<boolean>>;
+  isNew:boolean;
+  setIsNew:Dispatch<SetStateAction<boolean>>
 }
 
 
@@ -42,6 +46,7 @@ export const AuthContext = createContext<AuthContextType | undefined>(undefined)
 
 export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
   const [summaryInfo,setSummaryInfo]= useState<Transcribe| null>(null)
+  const [isNew,setIsNew]=useState(false)
   const [isAuthenticated, setIsAuthenticated] = useState<boolean>(()=>{
     const  cachedUser=sessionStorage.getItem('user')
     return cachedUser? true : false
@@ -59,6 +64,7 @@ const [activity, setActivity] = useState<UserActivity | null>(() => {
   const navigate = useNavigate()
   const logout = useCallback(() => {
     setIsAuthenticated(false);
+    
     setUser(null);
     setActivity(null);
     sessionStorage.clear();
@@ -86,6 +92,7 @@ const [activity, setActivity] = useState<UserActivity | null>(() => {
       console.warn('No user ID found, skipping fetchActivity');
       return;
     }
+  
     try{
     const response = await fetch(`http://localhost:4000/ai/${user?.id}`, {
           credentials: 'include', 
@@ -113,21 +120,32 @@ const [activity, setActivity] = useState<UserActivity | null>(() => {
     if (cachedUser) {
       setUser(JSON.parse(cachedUser));
       setIsAuthenticated(true);
+
     }
 
     if (cachedActivity) {
+      console.log("A", isNew)
       setActivity(JSON.parse(cachedActivity));
     } else {
       fetchActivity(); // Fetch activity only if it's not cached
     }
+    if(isNew) {
+      console.log(isNew)
 
-    checkAuth(); // Always verify auth status on load
-  }, [checkAuth, fetchActivity]);
+      fetchActivity()
+      setIsNew(false)
+    }
+    if(!isAuthenticated) checkAuth();
+     // Always verify auth status on load
+  }, [checkAuth, fetchActivity,isNew]);
 
-
+// User not logged in
+// after user logged in, checkauth should run
+// when there is 401 error or user manually logout checkauth should run
+// problem: checkauth running on every reload
 
   return (
-    <AuthContext.Provider value={{ isAuthenticated,setIsAuthenticated, user ,logout,checkAuth,activity,summaryInfo,setSummaryInfo, fetchActivity}}>
+    <AuthContext.Provider value={{ isAuthenticated,setIsAuthenticated, user ,logout,checkAuth,activity,summaryInfo,setSummaryInfo, fetchActivity,isNew,setIsNew}}>
       {children}
     </AuthContext.Provider>
   );

@@ -61,7 +61,7 @@ export default function BarChartComponent() {
   }, [])
 
   return (
-    <Card className="flex-col border-none justify-center items-center mb-8 ">
+    <Card className="flex-col border-none justify-center items-center  ">
       <CardHeader className="items-center pb-0">
         <CardTitle className="dark:text-white text-3xl">Your Interests & Asked Topics</CardTitle>
       </CardHeader>
