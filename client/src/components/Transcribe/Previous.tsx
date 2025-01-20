@@ -12,7 +12,6 @@ function Previous() {
   if(!activity?.thumbnail) return new Error
   const totalPages= Math.ceil(activity?.thumbnail.length/ itemsPerPage)
   const startIndex = currentIndex * itemsPerPage;
-  // const displayedItems = activi.slice(startIndex, startIndex + itemsPerPage);
 
   return (
     <AuthProvider>
@@ -34,47 +33,28 @@ function Previous() {
       
  
       </div>
-      {/* <div className="">
-        <button
-          onClick={()=>{ setCurrentIndex((prev)=>Math.max(0,prev-1))}}
-          disabled={currentIndex === 0}
-          className="absolute left-0  px-4 py-2 bg-blue-500 text-white rounded disabled:bg-blue-300 transform -translate-y-1/2"
-        >
-                     <ChevronLeft className="w-6 h-6" />
-
-        </button>
-        <span className="text-sm">
-            Page {currentIndex + 1} of {totalPages}
-          </span>
-        <button
-          onClick={()=>{setCurrentIndex((prev)=> Math.min(totalPages-1,prev+1))}}
-          disabled={currentIndex=== totalPages-1}
-          className="absolute right-0  px-4 py-2 bg-blue-500 text-white rounded disabled:bg-blue-300 transform -translate-y-1/2"
-        >
-           {">"}
-        </button>
-      </div>  */}
-      <div className="flex justify-center items-center mt-6 gap-4">
+   
+      <div className="flex justify-center items-center mt-6 gap-4 ">
           <button
             onClick={()=>{ setCurrentIndex((prev)=>Math.max(0,prev-1))}}
             disabled={currentIndex === 0}
-            className="p-2 rounded-full hover:bg-gray-100 disabled:opacity-50 disabled:cursor-not-allowed"
+            className="p-2 rounded-full dark:text-white dark:hover:text-black dark:hover:bg-gray-100 hover:bg-gray-300 disabled:opacity-50 disabled:cursor-not-allowed"
             aria-label="Previous page"
           >
-            <ChevronLeft className="w-6 h-6" />
+            <ChevronLeft className="w-6 h-6 " />
           </button>
           
-          <span className="text-sm">
+          <span className="text-md dark:text-white">
             Page {currentIndex + 1} of {totalPages}
           </span>
           
           <button
               onClick={()=>{setCurrentIndex((prev)=> Math.min(totalPages-1,prev+1))}}
               disabled={currentIndex=== totalPages-1}
-            className="p-2 rounded-full hover:bg-gray-100 disabled:opacity-50 disabled:cursor-not-allowed"
+            className="p-2 rounded-full dark:text-white dark:hover:text-black dark:hover:bg-gray-100 hover:bg-gray-300 disabled:opacity-50 disabled:cursor-not-allowed"
             aria-label="Next page"
           >
-            <ChevronRight className="w-6 h-6" />
+            <ChevronRight className="w-6 h-6 " />
           </button>
         </div>
     </div>

@@ -9,15 +9,13 @@ import { SkeletonWave, TypingAnimation,LoadingSkeleton} from "../components/Tran
 // import { useNavigate } from "react-router-dom";
 
 export default function Transcribe() {
-  const { activity,logout } = useAuthContext();
+  const { activity,logout,setIsNew } = useAuthContext();
   const [id, setId] = useState("");
   const [input, setInput] = useState("");
   const [output, setOutput] = useState<string>('');
   const [isDisable, setIsDisable] = useState(false);
   // const navigate=useNavigate()
   const handleSubmit = async (e: React.FormEvent) => {
-    
-    
     try {
       e.preventDefault();
       setIsDisable(true)
@@ -57,6 +55,7 @@ export default function Transcribe() {
         sessionStorage.setItem("id", data.data.id);
         localStorage.setItem("newactivity", `${!isDisable}`);
         setIsDisable(false);
+        setIsNew(true)
       
     } catch{
       setIsDisable(false);
@@ -90,17 +89,15 @@ export default function Transcribe() {
               type='url'
               value={input}
               onChange={(e) => setInput(e.target.value)}
-              className="font-bold text-xl dark:text-white rounded-xl  w-10/12 ml-10 h-12 border-2 text-black dark:bg-colorGradient1 border-gray-300 focus:outline-none pl-3"
+              className="font-bold text-xl dark:text-white rounded-xl  w-10/12 ml-10 h-12 border-2 text-black dark:bg-colorGradient1 border-gray-300 focus:outline-none pl-3 "
               pattern="https?://(www\.)?(youtube\.com|youtu\.be)/.*" 
               required
 disabled={isDisable}
             />
             <button
-              className={`dark:bg-colorGradient1 ${
-                isDisable
-                  ? "dark:bg-gray-400 bg-gray-300"
-                  : "dark:bg-colorGradient1 bg-colorGradient1  "
-              }   hover:bg-colorGradient3 text-white  rounded-lg  w-2/12 h-11 font-bold`}
+              className="dark:bg-colorGradient1 
+                 bg-colorGradient1  
+                hover:bg-colorGradient3 text-white   rounded-lg  w-2/12 h-11 font-bold disabled:opacity-50 disabled:cursor-not-allowed"
               disabled={isDisable}
 
             >
@@ -132,12 +129,7 @@ disabled={isDisable}
 
           <div>
           { 
-          // ( isDisable) && 
-   
-  //  <div className="">
-  //   <TypingAnimation/>
-  //   <SkeletonWave/>
-  //      </div > 
+ 
  
      }
             {output && (
