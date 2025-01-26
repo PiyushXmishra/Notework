@@ -41,10 +41,11 @@
     --chart-5: 0 0% 50%;   /* Other */
  
   
-  --color-chrome: hsl(var(--chart-1));
-  --color-safari: hsl(var(--chart-2));
-  --color-firefox: hsl(var(--chart-3));
-  --color-edge: hsl(var(--chart-4));
+  --color-topic1: hsl(var(--chart-1));
+  --color-topic2: hsl(var(--chart-2));
+  --color-topic3: hsl(var(--chart-3));
+  --color-topic4: hsl(var(--chart-4));
   --color-other: hsl(var(--chart-5));
-
+  
+  
  }  

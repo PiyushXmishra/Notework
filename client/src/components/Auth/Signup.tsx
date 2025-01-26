@@ -18,7 +18,7 @@ const navigate = useNavigate()
 const handleSubmit = async(e: React.FormEvent<HTMLFormElement>)=>{
     e.preventDefault()
     try{
-   const response =  await fetch('http://localhost:4000/auth/signup',{
+   const response =  await fetch('https://36zxg4pd-4000.inc1.devtunnels.ms/auth/signup',{
       method:'POST',
       headers: {
         'Content-Type': 'application/json',

@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import React, { createContext, useEffect, useState, ReactNode, useCallback, SetStateAction, Dispatch } from 'react';
 import { useNavigate } from 'react-router-dom';
 
@@ -83,7 +84,7 @@ const [activity, setActivity] = useState<UserActivity | null>(() => {
     // Cache user data
        } catch (error) {
       console.error('Auth check error:', error);
-
+     
     }
   },[logout]);
 

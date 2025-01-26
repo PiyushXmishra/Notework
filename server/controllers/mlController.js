@@ -11,11 +11,11 @@ const { url } = require('inspector')
 const { response } = require('express')
 const { error } = require('console')
 const { gemini } = require('../utils/geminiAn')
+const {getVideoDetails}=require('../utils/getVideoDetails')
 
 const filePath = path.join(__dirname, './../disk/A.pdf'); 
 const regex = /\.be\/([^?]+)/;
 exports.Summary= async(req,res,next)=>{
-    
         try{
                 let id=''
                 const {input}=  req.body
@@ -36,7 +36,7 @@ exports.Summary= async(req,res,next)=>{
      
         
         const response= await  geminiflash(transcript,prompt)
-               
+       const {genre,title}= await getVideoDetails(input)
                 const pdf = new FPDF('P','mm','A4');
                 pdf.AddPage();
                 pdf.SetFont('Arial','B',12);
@@ -47,7 +47,8 @@ exports.Summary= async(req,res,next)=>{
                   heading:response.heading,
                   prompt:input,
                   summary : response.text,
-                   genre:response.topic,
+                   genre,
+                   title,
                   
                   thumbnail:img
                 })
@@ -60,7 +61,7 @@ exports.Summary= async(req,res,next)=>{
              heading:response.heading,
              summary:response.text,
               id:promptModel._id,
-              genre:response.topic
+             
             }
            
           })
@@ -179,6 +180,11 @@ console.log(notePdf)
       message:message
     })
    }
+}
+
+
+exports.Genre= async(req,res,next)=>{
+
 }
 
 
