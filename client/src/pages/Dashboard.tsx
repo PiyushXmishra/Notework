@@ -1,12 +1,13 @@
-import BarChartComponent from "../components/Dashboard/BarChartComponent";
-import Recommendations from "../components/Dashboard/Recommendations";
+// import PieChartComponent from "../components/Dashboard/BarChartComponent";
 import Resources from "../components/Dashboard/Resources"
-import Analytics from "../components/Dashboard/Analytics";
+// import Analytics from "../components/Dashboard/Analytics";
 import { ThemeProvider } from "../context/Theme";
 import { useThemeButton } from "../hooks/useTheme";
-import { Suspense, useEffect, useRef } from "react";
+import { useEffect, useRef } from "react";
 import { useLocation } from "react-router-dom";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "../components/ui/card";
+import {UserStats} from "../components/Dashboard/RecentActivity"
+// import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "../components/ui/card";
+import BarChartComponent from "../components/Dashboard/BarChartComponent";
 
 const Dashboard: React.FC = () => {
   const {darkMode}=useThemeButton()
@@ -29,12 +30,14 @@ const Dashboard: React.FC = () => {
   }, [location]);
   return (
     <ThemeProvider>
-    <div className="flex flex-col gap-24 pl-6  dark:bg-colorGradient2">
-  
+    <div className="flex flex-col gap-12 pl-6  dark:bg-colorGradient2">
+  <div className="py-2 mt-8"> 
+  <UserStats/>
+  </div>  
       <div ref={analysisRef} id="analysis">
 <Resources /></div>
 {/* <div  className="flex flex-row gap-28" > */}
-<Card className="w-11/12 ml-4 py-4 mt-">
+{/* <Card className="w-11/12 ml-4 py-4 mt-">
           <CardHeader>
             <CardTitle className=" dark:text-white  text-2xl">Analytics Overview</CardTitle>
             <CardDescription className="dark:text-gray-400 text-xl">Summary of your usage and performance</CardDescription>
@@ -44,24 +47,18 @@ const Dashboard: React.FC = () => {
               <Analytics />
             </Suspense>
           </CardContent>
-        </Card>
+        </Card> */}
  {/* <Analytics/> */}
-         
 
-     
-       
         <div ref={chartsRef} id="charts">
           
         {/* </div> */}
         <BarChartComponent />
         </div>
-        <div className="dark:bg-colorGradient2 ">
+        {/* <div className="dark:bg-colorGradient2 ">
         <Recommendations />
-     </div> 
+        </div>  */}
       </div>
-
- 
-
     </ThemeProvider>
  
   );

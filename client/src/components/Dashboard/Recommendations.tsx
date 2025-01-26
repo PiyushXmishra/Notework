@@ -28,7 +28,7 @@ const recommendations: Recommendation[] = [
 
 const Recommendations: React.FC = () => {
   return (
-    <div className="max-w-full  p-4 ml-4 dark:bg-colorGradient2">
+    <div className="max-w-full flex flex-col  gap-8 p-4 ml-4 dark:bg-colorGradient2">
       <h2 className="text-2xl font-bold mb-6 dark:text-white">Recommendations</h2>
       <div className="space-y-4">
         {recommendations.map((rec, index) => (

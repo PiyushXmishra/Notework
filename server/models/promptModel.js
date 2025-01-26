@@ -23,6 +23,11 @@ const promptSchema = new Schema({
     genre:{
         type:String,required:true
     },
+
+    title:{
+        type:String,required:true
+    },
+
     createdAt: { type: Date, default: Date.now },
     thumbnail:{type: String, }
 

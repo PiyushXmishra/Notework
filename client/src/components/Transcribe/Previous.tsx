@@ -9,7 +9,7 @@ function Previous() {
    const {activity} = useAuthContext()
    const [currentIndex, setCurrentIndex] = useState(0);
    const itemsPerPage = 4; 
-  if(!activity?.thumbnail) return new Error
+  if(!activity?.thumbnail) return null
   const totalPages= Math.ceil(activity?.thumbnail.length/ itemsPerPage)
   const startIndex = currentIndex * itemsPerPage;
 

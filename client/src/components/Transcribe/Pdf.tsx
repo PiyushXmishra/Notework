@@ -51,7 +51,7 @@ function Pdf({heading,index,onPdfGenerated}:Heading) {
   return (
     <div>
 
-            { <button className="font-bold text-white flex gap-1 px-2 py-1.5 bg-gray-800 hover:bg-black dark:bg-colorGradient3 dark:text-white dark:hover:bg-hoverColor  rounded-lg  disabled:opacity-50 disabled:cursor-not-allowed" onClick={handleSubmit} disabled={isDisable}>
+            { <button className="font-bold sm:ml-0 ml-4 sm:my-0  my-1 text-white flex gap-1 px-2 py-1.5 bg-gray-800 hover:bg-black dark:bg-colorGradient3 dark:text-white dark:hover:bg-hoverColor  rounded-lg  disabled:opacity-50 disabled:cursor-not-allowed" onClick={handleSubmit} disabled={isDisable}>
           
             Create
            <p>Pdf</p> 

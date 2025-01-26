@@ -34,16 +34,18 @@ export default function Resources() {
       <div className=" flex flex-col ml-5 gap-4 lg:w-11/12  w-10/12">
         {activity?.heading.slice(0,visibleItems).map((value,index) => (
           <ul
-            className="flex flex-row border-gray-300 dark:border-none border  dark:shadow-colorGradient4 shadow-sm hover:shadow-md  transition-shadow duration-200    py-6 rounded-lg  max-sm:pl-5 justify-between pr-5   dark:bg-colorGradient1   " key={index}
+            className="flex sm:flex-row flex-col sm:gap-0 gap-4 border-gray-300 dark:border-none border  dark:shadow-colorGradient4 shadow-sm hover:shadow-md  transition-shadow duration-200    py-6 rounded-lg  max-sm:pl-5 justify-between pr-5   dark:bg-colorGradient1   " key={index}
           >
+            <div className="flex">
               <div className="flex-shrink-0 w-12 flex justify-center">
           
-            <File className="w-5 h-6 text-gray-800 dark:text-gray-400"/>
+            <File className="w-5 h-6 text-gray-800 dark:text-gray-400 "/>
             </div>
             <li  className=" flex flex-row gap-2 rounded sm:w-full font-[600]  pl-4 dark:text-white text-gray-800">
               {value ? value: <h1 > List is empty.</h1>} 
             </li>
-                 <a className="pr-2" target="_blank" href={activity?.url[index] }> { (activity?.url[index]===null && (!update[index] ) ? <Pdf heading={activity?.heading[index]} index={index} onPdfGenerated ={handleUpdate} />:<Download className="w-5 h-6 text-gray-800 dark:text-gray-400" />)}</a>
+            </div>
+                 <a className="pr-2" target="_blank" href={activity?.url[index] }> { (activity?.url[index]===null && (!update[index] ) ? <Pdf heading={activity?.heading[index]} index={index} onPdfGenerated ={handleUpdate} />:<Download className="w-5 h-6 text-gray-800 dark:text-gray-400 sm:mx-0 mx-4 sm:my-0 my-1" />)}</a>
             </ul>
         ))}
       </div>
