@@ -12,9 +12,11 @@ function Root() {
 
     <ThemeProvider>
     <AuthProvider>
+      <div className='w-full h-full min-h-[calc(100vh-header-footer-height)]'>
      <Home/>
      <Outlet/>
-      <Footer />
+      <Footer  />
+      </div>
     </AuthProvider>
     </ThemeProvider>
  

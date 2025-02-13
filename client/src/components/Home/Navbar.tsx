@@ -25,8 +25,8 @@ export default function Navbar() {
       setRoute(false)
     }   
   },[location.pathname])
+
   const handleNavigateToCharts = () => {
-    // Update URL to include hash and smoothly scroll to Charts
     navigate("/dash#charts");
     chartRef.current?.scrollIntoView({ behavior: "smooth" });
   };
@@ -130,9 +130,8 @@ export default function Navbar() {
             <li className="  font-bold     ">
 
             <NavLink to="signup" className={({isActive})=>`  border-2 dark:border-hoverColor ${(isActive || route)? 'bg-black p-2 rounded-lg text-white dark:bg-hoverColor border-2 dark:border-hoverColor border-black': 'hover:bg-black  hover:rounded-lg p-2 hover:text-white dark:text-white text-black dark:hover:bg-hoverColor border-2 border-hoverColor dark:border-hoverColor hover:border-black rounded-lg' }`}>
-                {" "}
                 <button className="">
-                  Start for free{" "}
+                  Start for free
                 </button>
             </NavLink>
             </li>

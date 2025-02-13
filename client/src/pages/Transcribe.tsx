@@ -3,10 +3,9 @@ import Createpdf from "../components/Transcribe/Createpdf";
 import Previous from "../components/Transcribe/Previous";
 import { useAuthContext } from "../hooks/useAuth";
 import { AuthProvider } from "../context/auth";
-// import { ProgressSpinner } from 'primereact/progressspinner'
 import { TextGenerateEffect } from "../components/Transcribe/text-generate-effect"; 
 import { SkeletonWave, TypingAnimation,LoadingSkeleton} from "../components/Transcribe/SkeletonEffect";
-// import { useNavigate } from "react-router-dom";
+import { ArrowRight } from "lucide-react";
 
 export default function Transcribe() {
   const { activity,logout,setIsNew } = useAuthContext();
@@ -78,18 +77,18 @@ export default function Transcribe() {
             Too long to undertsand the vast video , summarize it here{" "}
           </h2>
         </div>
-        <div className="border-2 border-gray-300 box-border rounded-lg mx-auto w-2/3 py-12">
+        <div className="border-2 border-gray-300 box-border rounded-lg mx-auto w-11/12 sm:w-2/3 py-12">
           <h2 className=" flex justify-center text-xl font-bold dark:text-white">
             Youtube URL
             
           </h2>
-          <form action="" className=" p-3 flex justify-center gap-4 " onSubmit={handleSubmit}
+          <form action="" className=" p-3 flex justify-center gap-4 max-w-3xl mx-auto" onSubmit={handleSubmit}
               >
             <input
               type='url'
               value={input}
               onChange={(e) => setInput(e.target.value)}
-              className="font-bold text-xl dark:text-white rounded-xl  w-10/12 ml-10 h-12 border-2 text-black dark:bg-colorGradient1 border-gray-300 focus:outline-none pl-3 "
+              className="font-bold text-xl dark:text-white rounded-xl  w-10/12 custom:ml-10 ml-2 h-12 border-2 text-black dark:bg-colorGradient1 border-gray-300 focus:outline-none pl-3 "
               pattern="https?://(www\.)?(youtube\.com|youtu\.be)/.*" 
               required
 disabled={isDisable}
@@ -97,12 +96,16 @@ disabled={isDisable}
             <button
               className="dark:bg-colorGradient1 
                  bg-colorGradient1  
-                hover:bg-colorGradient3 text-white   rounded-lg  w-2/12 h-11 font-bold disabled:opacity-50 disabled:cursor-not-allowed"
+                hover:bg-colorGradient3 text-white   rounded-lg  font-bold disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center min-w-[100px] max-[630px]:min-w-[44px] max-[630px]:px-3"
               disabled={isDisable}
 
             >
-              {" "}
-              Submit{" "}
+              <span className="hidden max-[630px]:block">
+              <ArrowRight className="w-5 h-5" />
+            </span>
+            <span className="block max-[630px]:hidden">
+              Submit
+            </span>
             </button>
           </form>
           
@@ -148,7 +151,7 @@ disabled={isDisable}
           </div>
         </div>
 
-        {activity?.heading.length === 0 ? <></> : <Previous />}
+        <Previous />
       </div>
     </AuthProvider>
   );

@@ -2,7 +2,7 @@
 import { useState } from "react";
 import { AuthProvider } from "../../context/auth";
 import { useAuthContext } from "../../hooks/useAuth";
-import { ChevronLeft, ChevronRight } from "lucide-react";
+import { ChevronLeft, ChevronRight,Video } from "lucide-react";
 
 function Previous() {
 
@@ -20,7 +20,14 @@ function Previous() {
       <div className="md:flex md:flex-row md:justify-center md:items-center md:gap-8 md:ml-10 md:mr-10 flex flex-col items-center md:w-11/12 w-4/5 mx-auto gap-20">  
  
  
-   {activity?.thumbnail.slice(startIndex, startIndex + itemsPerPage).map((value,key)=>(
+   {!activity?.thumbnail[0]?
+   <div className="flex flex-row items-center justify-center gap-8 dark:text-white lg:text-2xl md:text-xl text-lg p-4 mb-4 mt-4">
+<Video className="h-20 w-20"/>
+    <p className="">
+Your previous videos and their title would appear here
+    </p>
+   </div>
+  : activity?.thumbnail.slice(startIndex, startIndex + itemsPerPage).map((value,key)=>(
     <div className="border-2 border-gray-300 rounded  h-[300px] w-[250px] flex flex-col" key={ startIndex+ key}>
     <img src={value} className="w-full h-48 object-cover" alt="image" />
     <div className="p-2 flex-1 flex items-center justify-center">
@@ -29,12 +36,12 @@ function Previous() {
 </div>
 </div> 
          
-   ))}
-      
+   ))
+  }
  
       </div>
    
-      <div className="flex justify-center items-center mt-6 gap-4 ">
+   { activity.thumbnail[0] && (<div className="flex justify-center items-center mt-6 gap-4 ">
           <button
             onClick={()=>{ setCurrentIndex((prev)=>Math.max(0,prev-1))}}
             disabled={currentIndex === 0}
@@ -56,7 +63,7 @@ function Previous() {
           >
             <ChevronRight className="w-6 h-6 " />
           </button>
-        </div>
+        </div>)}
     </div>
     </AuthProvider>
   );

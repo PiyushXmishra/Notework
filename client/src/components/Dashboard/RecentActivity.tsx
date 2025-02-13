@@ -2,24 +2,39 @@ import { useEffect, useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "../../components/ui/card"
 import { FileText, Star, Pen } from "lucide-react"
 
+interface activity {
+  url:string[],
+  genre:string[],
+  heading:string[]
+}
 export function UserStats() {
     const [mostFrequent, setMostFrequent] = useState<{ element: string; count: number } | null>(null);
-
+    const [pdfs,setPdfs]=useState(0)
+    const [summary,setSummary] = useState(0)
     useEffect(() => {
-        // Retrieve array from sessionStorage
-        const stringsArray = JSON.parse(sessionStorage.getItem("activity") || "[]");
-    
+
+
+        const stringsArray:activity = JSON.parse(sessionStorage.getItem("activity") || "[]");
+
+        const  Url = stringsArray.url.length
+        
+        if(Url)  {     
+            setPdfs(Url)
+
+        }
+        if(stringsArray.heading.length){
+          setSummary(stringsArray.heading.length)
+        }
+
         const findMostFrequentElement = (arr: string[]): { element: string; count: number } | null => {
           if (arr.length === 0) return null;
     
           const frequencyMap: Record<string, number> = {};
     
-          // Count occurrences of each element
           arr.forEach((item) => {
             frequencyMap[item] = (frequencyMap[item] || 0) + 1;
           });
     
-          // Find the element with the highest frequency
           let maxElement = "";
           let maxCount = 0;
     
@@ -39,15 +54,20 @@ export function UserStats() {
     }, []);
 
   return (
+    <div>
+
+      <h1 className="pl-2 ml-4 dark:text-white text-2xl font-bold">Overview</h1>
+      
     <div className="grid grid-cols-1 md:grid-cols-3 md:gap-0.5 gap-8 ml-4 mt-8">
+      
       <Card  className="dark:bg-colorGradient1 dark:border-none w-10/12">
         <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
           <CardTitle className="text-sm font-bold dark:text-white">Your Summaries</CardTitle>
           <Pen className="h-4 w-4 text-muted-foreground dark:text-gray-300" />
         </CardHeader>
         <CardContent>
-          <div className="text-2xl font-bold dark:text-white">23</div>
-          <p className="text-xs text-muted-foreground dark:text-gray-300">+4 this week</p>
+          <div className="text-2xl font-bold dark:text-white">{summary}</div>
+          {/* <p className="text-xs text-muted-foreground dark:text-gray-300">+4 this week</p> */}
         </CardContent>
       </Card>
       <Card className="dark:bg-colorGradient1 dark:border-none w-10/12">
@@ -56,8 +76,8 @@ export function UserStats() {
           <FileText className="h-4 w-4 text-muted-foreground dark:text-gray-300" />
         </CardHeader>
         <CardContent>
-          <div className="text-2xl font-bold dark:text-white">14</div>
-          <p className="text-xs text-muted-foreground dark:text-gray-300">-30 sec from last week</p>
+          <div className="text-2xl font-bold dark:text-white">{pdfs}</div>
+          {/* <p className="text-xs text-muted-foreground dark:text-gray-300">-30 sec from last week</p> */}
         </CardContent>
       </Card>
       <Card className="dark:bg-colorGradient1 dark:border-none w-10/12">
@@ -67,10 +87,10 @@ export function UserStats() {
         </CardHeader>
         <CardContent>
        <div className="text-2xl font-bold dark:text-white">{ mostFrequent ?mostFrequent.element: "Technology"}</div>
-          
-          <p className="text-xs text-muted-foreground dark:text-gray-300">Based on your summaries</p>
+           <p className="text-xs text-muted-foreground dark:text-gray-300">Based on your summaries</p>
         </CardContent>
       </Card>
+    </div>
     </div>
   )
 }

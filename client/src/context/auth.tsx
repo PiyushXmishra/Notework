@@ -1,8 +1,7 @@
-/* eslint-disable react-hooks/exhaustive-deps */
+import axios from 'axios';
 import React, { createContext, useEffect, useState, ReactNode, useCallback, SetStateAction, Dispatch } from 'react';
 import { useNavigate } from 'react-router-dom';
 
-// Define types
 interface User {
   id: string;
   name: string;
@@ -15,15 +14,11 @@ interface Transcribe {
   setSummaryInfo: Dispatch<SetStateAction<Transcribe|null>>
 }
 interface UserActivity {
-  
   thumbnail: string[];
   heading: string[];
   url: string[],
   genre:string[]
-  
-
 }
-
 
 interface AuthContextType {
   isAuthenticated: boolean;
@@ -35,19 +30,16 @@ interface AuthContextType {
   fetchActivity: () => Promise<void>;
   checkAuth:() => Promise<void>;
   logout:()=> void;
-  isUserExist:boolean;
-  setIsUserExist:Dispatch<SetStateAction<boolean>>;
   isNew:boolean;
   setIsNew:Dispatch<SetStateAction<boolean>>
 }
-
-
 
 export const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
   const [summaryInfo,setSummaryInfo]= useState<Transcribe| null>(null)
   const [isNew,setIsNew]=useState(false)
+
   const [isAuthenticated, setIsAuthenticated] = useState<boolean>(()=>{
     const  cachedUser=sessionStorage.getItem('user')
     return cachedUser? true : false
@@ -72,20 +64,25 @@ const [activity, setActivity] = useState<UserActivity | null>(() => {
     navigate('/login');
   }, [navigate]);
   const checkAuth = useCallback(async () => {
+    
     try {
-      const response = await fetch('http://localhost:4000/auth/verify', {
-        credentials: 'include',
+      const response = await axios.get('http://localhost:4000/auth/verify', 
+       { withCredentials:true,
       });
-      const resp = await response.json();
-      if(!response.ok) return new Error
+      if (!response || response.status !== 200) {
+        throw new Error("Authentication failed");
+      }
         setIsAuthenticated(true);
-        setUser(resp.data);
-        sessionStorage.setItem('user', JSON.stringify(resp.data));
-    // Cache user data
+        setUser(response.data);
+        console.log(response)
+        sessionStorage.setItem('user', JSON.stringify(response.data.data));
+         
        } catch (error) {
       console.error('Auth check error:', error);
-     
+      setIsAuthenticated(false);
+  setUser(null);
     }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   },[logout]);
 
   const fetchActivity = useCallback( async()=>{
@@ -100,50 +97,39 @@ const [activity, setActivity] = useState<UserActivity | null>(() => {
         });
   
         if (!response.ok) {
-          console.log("handleLogout run hua")
            return
         }
        
         const data = await response.json();
         setActivity(data.data);
         sessionStorage.setItem('activity', JSON.stringify(data.data)); 
-        
     }catch(error){
       console.error('Error is:',error)
    
     }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   },[user?.id,logout])
 
   useEffect(() => {
     const cachedUser = sessionStorage.getItem('user');
     const cachedActivity = sessionStorage.getItem('activity');
-
     if (cachedUser) {
       setUser(JSON.parse(cachedUser));
       setIsAuthenticated(true);
-
     }
 
     if (cachedActivity) {
-      console.log("A", isNew)
-      setActivity(JSON.parse(cachedActivity));
+        setActivity(JSON.parse(cachedActivity));
     } else {
-      fetchActivity(); // Fetch activity only if it's not cached
+        fetchActivity(); 
     }
     if(isNew) {
-      console.log(isNew)
-
       fetchActivity()
       setIsNew(false)
     }
     if(!isAuthenticated) checkAuth();
-     // Always verify auth status on load
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [checkAuth, fetchActivity,isNew]);
-
-// User not logged in
-// after user logged in, checkauth should run
-// when there is 401 error or user manually logout checkauth should run
-// problem: checkauth running on every reload
 
   return (
     <AuthContext.Provider value={{ isAuthenticated,setIsAuthenticated, user ,logout,checkAuth,activity,summaryInfo,setSummaryInfo, fetchActivity,isNew,setIsNew}}>

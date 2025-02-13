@@ -1,49 +1,49 @@
 
-import { useEffect, useState } from "react"
+import {  useState } from "react"
 import ContinuewithGoogle from "./ContinuewithGoogle"
 import { NavLink, useNavigate } from "react-router-dom"
+import { usePost } from "../../context/apiContext"
+import { AuthResponse } from "../../types/apiType"
 import { useAuthContext } from "../../hooks/useAuth"
 function Signup() {
-const [username,setUserName]= useState('')
-const [email,setEmail]= useState('')
-const [password,setPassword]= useState('')
-const [confirmPassword,setConfirmPassword]= useState('')
+
+const [formData,setFormData]= useState({
+  name:"",
+  email:"",
+  password:"",
+  confirmPassword:""
+})
 const [signupstatus, setSignupStatus] = useState<boolean| undefined>()
-const {user}= useAuthContext()
 const navigate = useNavigate()
+const {setIsAuthenticated}=useAuthContext()
+const handleChange = async (e: {
+  target: { name: string; value: string | number };
+}) => {
+  const { name, value } = e.target;
+  setFormData({
+    ...formData,
+    [name]: value,
+  });
+};
 
-//   const handleSignUp=()=>{
-//  window.location.href = 'http://localhost:4000/auth/google'
-//   }
-const handleSubmit = async(e: React.FormEvent<HTMLFormElement>)=>{
-    e.preventDefault()
-    try{
-   const response =  await fetch('https://36zxg4pd-4000.inc1.devtunnels.ms/auth/signup',{
-      method:'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      credentials:'include',
+  const {
+    loading,
+    error,
+    execute: signup,
+  } = usePost<AuthResponse>("/auth/signup");
 
-      body:JSON.stringify({name:username,email,password,confirmPassword})
-    })
-
-    const value = await response.json()
-    console.log(value)
-    if(!response.ok ) return new Error
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    try {
+       await signup(formData);
+      setIsAuthenticated(true);
+      setSignupStatus(true)
+        navigate("/");
    
-
-     setSignupStatus(true)
-  
-    
-  }catch(err){
-      console.log(err)
-     }  
-}
-useEffect(()=>{
-  if(user) navigate('/')
-// eslint-disable-next-line react-hooks/exhaustive-deps
-},[user])
+    } catch {
+      console.error("Login failed");
+    }
+  };
 
   return (
  <div className="dark:bg-colorGradient2">
@@ -63,12 +63,12 @@ useEffect(()=>{
         <input
             type="text"
             name="name"
-             value={username}
+             value={formData.name}
            
             id="name"
             placeholder="Full Name"
             className=" mt-2 py-3 px-3 rounded-lg dark:bg-colorGradient1  border  border-gray-400 dark:text-white font-semibold placeholder-gray-600 dark:placeholder-gray-400  dark:autofill:placeholder-colorGradient1  focus:ring-1 dark:focus:ring-gray-400 focus:ring-colorGradient2"
-            onChange={(e)=>setUserName(e.target.value)}
+            onChange={handleChange}
             required
             
        />
@@ -83,9 +83,9 @@ useEffect(()=>{
             name="email"
             id="email"
             placeholder="you@example.com"
-             value={email}
+             value={formData.email}
             className="w-100 mt-2 py-3 px-3 rounded-lg dark:bg-colorGradient1 border border-gray-400 dark:text-white font-semibold placeholder-gray-600 dark:placeholder-gray-400  autofill:dark:bg-colorGradient1 focus:ring-1 dark:focus:ring-gray-400 focus:ring-colorGradient2"
-             onChange={(e) => setEmail(e.target.value)}
+             onChange={handleChange}
              required
              
       />
@@ -99,10 +99,10 @@ useEffect(()=>{
             type="password"
             name="password"
            
-            value={password}
+            value={formData.password}
             placeholder="••••••••"
             className="w-100 mt-2 py-3 px-3 rounded-lg dark:bg-colorGradient1 border border-gray-400 dark:text-white font-semibold placeholder-gray-600 dark:placeholder-gray-400  autofill:dark:bg-colorGradient1 focus:ring-1 dark:focus:ring-gray-400 focus:ring-colorGradient2"
-            onChange={(e) => setPassword(e.target.value)}
+            onChange={handleChange}
             required
         />
     </div>
@@ -112,22 +112,37 @@ useEffect(()=>{
         </label>
         <input
             type="Password"
-            name="Confirmpassword"
-          
-             value={confirmPassword}
+            name="confirmPassword"
+            value={formData.confirmPassword}
             placeholder="••••••••"
             className="w-100 mt-2 py-3 px-3 rounded-lg dark:bg-colorGradient1 border border-gray-400 dark:text-white font-semibold placeholder-gray-600 dark:placeholder-gray-400  autofill:dark:bg-colorGradient1 focus:ring-1 dark:focus:ring-gray-400 focus:ring-colorGradient2"
-            onChange={(e) => setConfirmPassword(e.target.value)}
+            onChange={handleChange}
             required
         />
     </div>
+
+    {error && (
+            <div className="rounded-md bg-red-50 p-4">
+              <div className="flex">
+                <div className="ml-3">
+                  <h3 className="text-sm font-medium text-red-800">
+                   Oops! Sign Up failed
+                  </h3>
+                  <div className="mt-2 text-sm text-red-700">
+                    {error.message}
+                  </div>
+                </div>
+              </div>
+            </div>
+          )}
+
 <div className=" flex justify-center ">
     <button
         type="submit"
         className="  w-full bg-colorGradient2 dark:bg-colorGradient1 text-white font-bold py-3 px-3  rounded-lg mt-3 hover:bg-black transition ease-in-out duration-300"
-        
+        disabled={loading}
     >
-        Create Account
+        {loading ? "Creating ...." : "Create Account"}
     </button>
   
     </div>
