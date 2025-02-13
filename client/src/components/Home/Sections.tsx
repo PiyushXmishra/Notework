@@ -4,7 +4,7 @@ import { useAuthContext } from '../../hooks/useAuth';
 export default function Section() {
   const {user,isAuthenticated}= useAuthContext()
   return (
-    <section className="dark:bg-colorGradient2 py-16">
+    <section className="dark:bg-colorGradient2 py-16 ">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center">
           <div className="flex flex-row justify-center gap-2">
@@ -92,7 +92,7 @@ export default function Section() {
           </div>
         </div>
 
-        <div className="mt-12 text-center">
+        <div className="mt-12 mb-14 text-center">
           <NavLink to={(user && isAuthenticated)? '/pdf': '/login' }>
           <button className="bg-black hover:bg-colorGradient2 text-white px-8 py-3 rounded-lg text-lg font-bold  dark:bg-colorGradient2 dark:hover:bg-colorGradient1 inline-flex items-center  ">
             Try It Now

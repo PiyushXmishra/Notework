@@ -3,7 +3,7 @@
 function Footer() {
 
   return (
-    <div className="" >
+    <div className="w-full mt-auto" >
         
       <footer className="bg-black dark:bg-colorGradient1   pt-6 pb-2 ">
         <span className="text-white px-6">

@@ -13,6 +13,9 @@ export default {
   darkMode:"class",
   theme: {
     extend: {
+      screens:{
+        custom:"712px"
+      },
       colors: {
         customBlue: '#052ea2',
         darkViolet:'#752e7e',

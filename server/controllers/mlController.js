@@ -33,10 +33,8 @@ exports.Summary= async(req,res,next)=>{
                
                 const img = `https://img.youtube.com/vi/${id}/maxresdefault.jpg`
         const transcript = await  extract_transcript(id)
-     
-        
         const response= await  geminiflash(transcript,prompt)
-       const {genre,title}= await getVideoDetails(input)
+        const {genre,title}= await getVideoDetails(input)
                 const pdf = new FPDF('P','mm','A4');
                 pdf.AddPage();
                 pdf.SetFont('Arial','B',12);
@@ -49,8 +47,7 @@ exports.Summary= async(req,res,next)=>{
                   summary : response.text,
                    genre,
                    title,
-                  
-                  thumbnail:img
+                   thumbnail:img
                 })
             
          await promptModel.save()

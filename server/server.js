@@ -6,7 +6,10 @@ const DB = process.env.DATABASE.replace(
   process.env.DATABASE_PASSWORD
 )
 mongoose
-  .connect(DB)
+  .connect(DB,{
+       serverSelectionTimeoutMS: 5000
+  }
+  )
   .then(() => {
     console.log("MONGODB connected successfully!👋");
   })

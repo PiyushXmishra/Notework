@@ -23,13 +23,18 @@ const signToken = (id) => {
     expires: new Date(
       Date.now() + process.env.JWT_COOKIE_EXPIRES*60*60*24*1000
     ),
-    httpOnly: true
+    httpOnly: true,
+    secure: true,
+  sameSite: 'strict',
+  domain:'http://localhost:5173',
+  path:'/'
 
   }
  
   exports.signup = async (req, res, next) => {
     try {
       const email = req.body.email
+      console.log(req.body.confirmPassword)
       const existingUser = await noteUser.findOne({ email });
       if (existingUser) return res.status(400).json({ message: 'User already exists' });
       const profilePicture = profileImageUrl[Math.floor(Math.random() * profileImageUrl.length)];
@@ -41,8 +46,6 @@ const signToken = (id) => {
         profilePicture,
         joinedDate
       });
-     
-
       const token = signToken(newUser._id);
       res.cookie('JWT',token,cookie)
       console.log(token);
@@ -50,7 +53,6 @@ const signToken = (id) => {
         status: "ok",
         token,
       });
-      // console.log(token+ "\n" + data.newUser)
     } catch ({ name, message }) {
       res.status(404).json({
         status: name,
@@ -98,17 +100,19 @@ const signToken = (id) => {
 
 exports.auth= async(req,res,next)=>{
   try {
-  const {JWT} = req.cookies
-  console.log(JWT)
+  const JWT = req.cookies.JWT
+
 
   if (!JWT) {
-  
     return res.status(401).json({ message: 'No jwt provided' });
   }
   const decoded =await  jwt.verify(JWT, process.env.JWT_SECRET);
-    console.log(decoded)
+    console.log('Decoded: ',decoded.id)
     const user = await noteUser.findById(decoded.id)
-       res.status(200).json({
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }   
+    res.status(200).json({
         status:"success",
         data:{
           id: decoded.id,
@@ -118,6 +122,7 @@ exports.auth= async(req,res,next)=>{
           joinedDate: user.joinedDate
         }
       }); 
+      next()
   } catch (err) {
   console.log(err)
     return res.status(401).json({ message: err });
@@ -127,16 +132,17 @@ exports.auth= async(req,res,next)=>{
 
 
 exports.logout= async(req,res)=>{
-  const {JWT}= req.cookies
-  if (!JWT) {
+ 
+  if (!req.cookies.JWT) {
   
     return res.status(401).json({ message: 'No jwt provided' });
   }
 
-  res.clearCookie('JWT', {
+  res.cookie('JWT','', {
     httpOnly: true,
-    secure: true, // Use secure cookies in production
-    sameSite: 'strict', // Adjust as per your application
+    secure: true, 
+    sameSite: 'strict',
+    expires:new Date(0) 
   });
   res.status(200).send('Logged out');
 }

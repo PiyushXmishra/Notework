@@ -45,13 +45,11 @@ const handleLogout = async () => {
   try {
     const response = await fetch('http://localhost:4000/auth/logout', {
       method: 'POST',
-      credentials: 'include', // Include cookies in the request
+      credentials: 'include', 
     });
     if (response.ok) {
       sessionStorage.clear()
-      console.log('Logged out successfully');
-      
-      navigate('/')
+       navigate('/');
       window.location.reload();
     } else {
       console.error('Failed to log out');
@@ -83,10 +81,10 @@ const handleDeleteAccount = async()=>{
    
 }
   return (
-    <div className="dark:bg-colorGradient2 p-12 md:py-14 2xl:h-screen 2xl:flex 2xl:items-center">
+    <div className="dark:bg-colorGradient2 p-12 md:py-14 2xl:h-screen 2xl:flex 2xl:items-center ">
       
     <motion.div 
-      className=" max-w-max mx-auto p-6   bg-white dark:bg-colorGradient1 rounded-lg dark:border border-gray-300 border-2 shadow-2xl space-y-4  "
+      className=" max-w-max mx-auto p-6   bg-white dark:bg-colorGradient1 rounded-lg dark:border border-gray-300 border-2 shadow-2xl space-y-4  mb-16"
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       transition={{ duration: 0.5 }}

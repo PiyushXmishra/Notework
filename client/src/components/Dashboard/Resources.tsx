@@ -2,8 +2,9 @@
 import {  useState } from "react";
 import { AuthProvider } from "../../context/auth";
 import { useAuthContext } from "../../hooks/useAuth";
-import { Download,File } from 'lucide-react';
+import { Download,File ,FileText} from 'lucide-react';
 import Pdf from "../Transcribe/Pdf";
+import { NavLink } from "react-router-dom";
 export default function Resources() {
   const {activity} = useAuthContext()
   const [visibleItems, setVisibleItems] = useState<number>(5); 
@@ -32,7 +33,14 @@ export default function Resources() {
         Resources
       </h1>
       <div className=" flex flex-col ml-5 gap-4 lg:w-11/12  w-10/12">
-        {activity?.heading.slice(0,visibleItems).map((value,index) => (
+        {!activity?.heading[0]   ? 
+                <div className="dark:text-white lg:text-xl text-lg flex flex-row gap-4 justify-center items-center lg:mt-10 md:mt-15 mt-12">
+          
+            <FileText className="h-32 w-24 "/>  <p>   Go create your first summary in the {' '}
+         
+                    <NavLink to = '/pdf' className={'underline dark:text-blue-400 text-blue-500'}>Transcribe </NavLink>   section. </p></div>
+
+   :      activity?.heading.slice(0,visibleItems).map((value,index) => (
           <ul
             className="flex sm:flex-row flex-col sm:gap-0 gap-4 border-gray-300 dark:border-none border  dark:shadow-colorGradient4 shadow-sm hover:shadow-md  transition-shadow duration-200    py-6 rounded-lg  max-sm:pl-5 justify-between pr-5   dark:bg-colorGradient1   " key={index}
           >
@@ -47,7 +55,8 @@ export default function Resources() {
             </div>
                  <a className="pr-2" target="_blank" href={activity?.url[index] }> { (activity?.url[index]===null && (!update[index] ) ? <Pdf heading={activity?.heading[index]} index={index} onPdfGenerated ={handleUpdate} />:<Download className="w-5 h-6 text-gray-800 dark:text-gray-400 sm:mx-0 mx-4 sm:my-0 my-1" />)}</a>
             </ul>
-        ))}
+        ))
+        }
       </div>
       { activity?.heading && (visibleItems < activity?.heading?.length) &&  (
       <div className="flex flex-col justify-center gap-4">
